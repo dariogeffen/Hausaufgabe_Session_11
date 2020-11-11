@@ -8,16 +8,26 @@ secret = random.randint(1,30)
 current_time = datetime.now()
 attempts = 0
 scores = []
+x=0
 
-print()
+print("-------------------------------------------------------------")
+print("High Scores:")
 
-
+#display highscores
 with open("scores.json","r") as file:
     scores = json.loads(file.read())
+    sort_scores = sorted(scores, key=lambda i: i['attempts'])
+    while x < 3:
+        entries = sort_scores[x]
+        t=entries['date']
+        t=datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f')
+        print(f"{entries['name']}'s Score am {t.day}.{t.month}.{t.year}: {entries['attempts']}")
+        x += 1
 
-print("Jetzt geht's los!")
+print("Schaffst du es die Zahl mit weniger Versuchen zu erraten?!!")
+print("-------------------------------------------------------------")
 name = input("Bitte Namen eingeben: ")
-print("______________________________")
+print("-------------------------------------------------------------")
 
 while True:
     guess = int(input("Bitte gib eine Zahl ein: "))
@@ -32,12 +42,6 @@ while True:
             score_data = {"attempts": attempts, "date": str(current_time), "name":(name), "wrong_guesses":(wrong_guesses)}
             scores.append(score_data)
             file.write(json.dumps(scores))
-
-        #with open("scores.json", "r") as file:
-            #new_scores = json.loads(file.read())
-            #sorted_scores = sorted(new_scores, key=lambda i: i['attempts'])
-            #print(sorted_scores)
-
 
         break
     elif guess > secret:
